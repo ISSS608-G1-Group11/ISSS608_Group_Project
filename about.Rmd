@@ -1,0 +1,13 @@
+---
+title: "About this site"
+description: |
+  ISSS608 – Visual Analytics and Applications
+  
+  Group Member: Ahmad Fady Ganis;Qinyu Wang;Ruiyun Yan
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+

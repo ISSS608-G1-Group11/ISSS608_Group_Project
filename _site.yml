@@ -1,0 +1,13 @@
+name: "ISSS608_Group_Project"
+title: "Group Website"
+description: |
+  Group Website
+output_dir: "_site"
+navbar:
+  right:
+    - text: "Home"
+      href: index.html
+    - text: "About"
+      href: about.html
+  search: true
+output: distill::distill_article
