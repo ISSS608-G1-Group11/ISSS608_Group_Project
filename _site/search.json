@@ -3,10 +3,10 @@
     {
       "path": "about.html",
       "title": "About this site",
-      "description": "ISSS608 – Visual Analytics and Applications\n\nGroup Member:Ahmad Fady Ganis Qinyu Wang Ruiyun Yan\n",
+      "description": "ISSS608 – Visual Analytics and Applications\n\nGroup Member: Ahmad Fady Ganis;Qinyu Wang;Ruiyun Yan\n",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-06-18T22:32:44+08:00"
+      "last_modified": "2021-06-18T23:13:08+08:00"
     },
     {
       "path": "Group_Project_Proposal.html",
@@ -20,7 +20,7 @@
       ],
       "date": "`r Sys.Date()`",
       "contents": "\r\n\r\nContents\r\n1.Introduction\r\n2. Challenge Taken\r\n3. Objectives\r\n4.Assignment\r\n5.Schedule\r\n\r\n1.Introduction\r\nAs part of the VAST 2021 data visualization challenge. The task given is a scenario set in the fictional region of Kronos, where the natural gas production company GAStech has operated in the region for roughly 20 years. While the company has been successful throughout the period, some citizens of Kronos believes that their operations has not been responsible environmentally, most notably the group Protectors of Kronos (PoK). This culminates up to the current year where GAStech has successfully launched their IPO. However, some employees has been missing with PoK being suspected behind the scenes.\r\nAs data visualization experts, we were called by the authorities of Kronos and Thetys, the region where GAStech originated, to help visualize the events happening and find anything in the data that may help understand more about the missing employees.\r\n2. Challenge Taken\r\nFor this project, the challenge that was taken is the second mini-challenge, which is to find insights based on the geospatial data provided by the company cars assigned to the employees of GAStech as well as historical data of purchases made by said employees.\r\n3. Objectives\r\nBased on the given tasks, the main outline of this project can be listed as follow:\r\nIdentify the most popular locations frequented by the missing employees and collect insights using the historical data. In addition, anomalies are to also be noted and attempted to be explained.\r\nAnalyze the anomalies with the addition of location data of the assigned company vehicles and note the discrepancies present.\r\nMatch the employees with their credit cards, and subsequently, their purchasing and travelling behavior.\r\nIdentify both formal and informal relationships between the employees.\r\nIdentify any suspicious activities occurring between the employees.\r\n4.Assignment\r\nBelow are the assignments we will take:\r\nGroup Members\r\nAssignments\r\nAhmad Fady Ganis\r\nMini-Challenge 2\r\nQinyu Wang\r\nMini-Challenge 2\r\nRuiyun Yan\r\nMini-Challenge 2\r\n5.Schedule\r\n\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-06-18T23:04:12+08:00"
+      "last_modified": "2021-06-18T23:13:10+08:00"
     },
     {
       "path": "index.html",
@@ -28,7 +28,7 @@
       "description": "Welcome to the website. I hope you enjoy it!\n",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-06-18T22:27:34+08:00"
+      "last_modified": "2021-06-18T23:13:13+08:00"
     }
   ],
   "collections": []
