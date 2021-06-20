@@ -5,6 +5,8 @@ description: |
 output_dir: "_site"
 navbar:
   right:
+    - text: "Proposal"
+      href: Group_Project_Proposal.html
     - text: "Home"
       href: index.html
     - text: "About"

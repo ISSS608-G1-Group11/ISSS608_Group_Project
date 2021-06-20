@@ -11,7 +11,7 @@ date: "`r Sys.Date()`"
 output: 
   distill::distill_article:
     toc: true
-    toc_float: false
+    toc_float: true
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
@@ -49,7 +49,6 @@ Below are the assignments we will take:
  Ahmad Fady Ganis | Mini-Challenge 2    
  Qinyu Wang       | Mini-Challenge 2
  Ruiyun Yan       | Mini-Challenge 2
- 
  
  
 # 5.Schedule
