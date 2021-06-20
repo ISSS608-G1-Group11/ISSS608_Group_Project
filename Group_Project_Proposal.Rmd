@@ -5,7 +5,7 @@ description: |
 author:
   - name: Ahmad Fady Ganis Qinyu Wang Ruiyun Yan
     url: https://example.com/norajones
-    affiliation: Spacely Sprockets
+    affiliation: Singapore Management University
     affiliation_url: https://example.com/spacelysprokets
 date: "`r Sys.Date()`"
 output: 
@@ -55,7 +55,9 @@ Below are the assignments we will take:
  
  ![](Schedule.png)
  
-       
+# 6. GitHub Link
+
+Please click [here](https://github.com/ISSS608-G1-Group11/ISSS608_Group_Project)
 
 
 
