@@ -5,7 +5,7 @@ library(shiny)
 ui <- fluidPage(
 
     # Application title
-    titlePanel("XXXXXXX"),
+    titlePanel("AAAAA"),
 
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
