@@ -1,15 +1,18 @@
-library(shiny)
-
-packages = c('raster','sf','tmap','clock','tidyverse','lubridate','ggiraph',
+#Install Packages
+packages = c('shiny','raster','sf','tmap','clock','tidyverse','lubridate','ggiraph',
              'ggthemes','viridis','plotly','treemapify','igraph','ggpubr',
-             'readr','mapview')
+             'readr','mapview',"shinythemes")
 for (p in packages){
     if(!require(p, character.only = T)){
         install.packages(p)
     }
     library(p,character.only = T)
 }
+
+# Read Data
 cd <- read.csv("data/cc_data.csv")
+gps <- read_csv("data/gps.csv")
+## modify data
 cd_locations <- unique(cd$location)
 cdcount_location <- cd %>% group_by(location) %>% 
     summarize(count = n())
@@ -41,9 +44,30 @@ cdcount_location$type <- newvalues[ match(cdcount_location$location, oldvalues) 
 
 
 
+cd$timestamp <- date_time_parse(cd$timestamp,
+                                zone = "",
+                                format = "%m/%d/%Y %H:%M")
+gps$Timestamp <- date_time_parse(gps$Timestamp,
+                                 zone = "",
+                                 format = "%m/%d/%Y %H:%M")
+gps$id <- as_factor(gps$id)
+gps$hour <- hour(gps$Timestamp) 
+cd$day <- day(cd$timestamp) %>% as_factor
+cd$hour <- as.numeric(format(cd$timestamp,"%H"))
+cd_calendar <- cd %>% count(day, location) %>% as_factor()
+cd_calendar2 <- cd %>% count(hour, location) %>% as_factor()
+
+car_data <- gps %>% 
+  group_by(id,hour) %>% 
+  summarise(n = n()) %>% 
+  ungroup()
+
+
+
 ui <- navbarPage(
     "Mini Challenge 2"
     ,
+    theme = shinytheme("cosmo"),
     tabPanel("Home"
              ,
              fluidPage(
@@ -53,126 +77,62 @@ ui <- navbarPage(
                  
              )),
     
-    navbarMenu("Chart"
+    navbarMenu("EDA"
                ,
-               tabPanel("Map"
+                 tabPanel("Bar chart"
                         ,
                         fluidPage(
-                            titlePanel("Map"),
+                            titlePanel("Popular Locations"),
                             sidebarLayout(
                                 sidebarPanel(
-                                    dateRangeInput(inputId = 'Date',
-                                                   label = 'Date range of map',
-                                                   start = '2014-01-06',
-                                                   end = '2014-01-19',
-                                                   min = '2014-01-06',
-                                                   max = '2014-01-19'
-                                    ),
-                                    
-                                    sliderInput(inputId = 'Timerange',
-                                                label = 'choose the time range of car path',
-                                                min = 0,
-                                                max = 24,
-                                                value = c(0,24)),
-                                    
-                                    checkboxGroupInput(inputId = 'Name',
-                                                       label = 'Employee names',
-                                                       choices = list("Nils Calixto" = 1,
-                                                                      "Lars Azada" = 2,
-                                                                      "Felix Balas" = 3,
-                                                                      "Ingrid Barranco" = 4,
-                                                                      "Isak Baza" = 5,
-                                                                      "Linnea Bergen" = 6,
-                                                                      "Elsa Orilla" = 7,
-                                                                      "Lucas Alcazar" = 8,
-                                                                      "Gustav Cazar" = 9,
-                                                                      "Ada Campo-Corrente" = 10,
-                                                                      "Axel Calzas" = 11,
-                                                                      "Hideki Cocinaro" = 12,
-                                                                      "Inga Ferro" = 13,
-                                                                      "Lidelse Dedos" = 14,
-                                                                      "Loreto Bodrogi" = 15,
-                                                                      "Isia Vann" = 16,
-                                                                      "Sven Flecha" = 17,
-                                                                      "Birgitta Frente" = 18,
-                                                                      "Vira Frente" = 19,
-                                                                      "Stenig Fusil" = 20,
-                                                                      "Hennie Osvaldo" = 21,
-                                                                      "Adra Nubarron" = 22,
-                                                                      "Varja Lagos" = 23,
-                                                                      "Minke Mies" = 24,
-                                                                      "Kanon Herrero" = 25,
-                                                                      "Marin Onda" = 26,
-                                                                      "Kare Orilla" = 27,
-                                                                      "Isande Borrasca" = 28,
-                                                                      "Bertrand Ovan" = 29,
-                                                                      "Felix Resumir"=30,
-                                                                      "Sten Sanjorge Jr." = 31,
-                                                                      "Orhan Strum" = 32,
-                                                                      "Brand Tempestad" = 33,
-                                                                      "Edvard Vann" = 34,
-                                                                      "Willem Vasco-Pais" = 35,
-                                                                      "Truck 101" = 101,
-                                                                      "Truck 104" = 104,
-                                                                      "Truck 105" = 105,
-                                                                      "Truck 106" = 106,
-                                                                      "Truck 107" = 107),
-                                                       selected = c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,
-                                                                    15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,
-                                                                    30,31,32,33,34,35,101,104,105,106,107))
-                                ),
-                                mainPanel("MAP")
-                            )
-                        )),
-               
-               tabPanel("Bar chart"
-                        ,
-                        fluidPage(
-                            # Application title
-                            titlePanel("Popular locations"),
-                            sidebarLayout(
-                                sidebarPanel(
+                                    width = 2,
                                     checkboxInput(inputId = "showdata",
                                                   label = "Show data table",
                                                   value = TRUE),
-                                    width = 2
-                                ),
+                                            ),
                                 mainPanel(plotOutput("barchart"),
-                                          DT::dataTableOutput(outputId = "bartable"))
+                                          DT::dataTableOutput(
+                                            outputId = "bartable"
+                                            )
+                                          )
                                         )
                                 )
                         ),
                tabPanel("Heatmap"
                         ,
                         fluidPage(
-                            #put heatmaps here
-                            #add a checkbox to choose different heatmap
-                            )),          
-               tabPanel("Parallel Chart"
-                        ,
-                        "here to show parallel chart")),
-
-    navbarMenu("Answer"
-               ,
-               tabPanel("Q1"
+                            titlePanel("Heatmap of "),
+                            sidebarLayout(
+                                sidebarPanel(
+                                    radioButtons(inputId = "heatmapID",
+                                                 "Heatmap Type:",
+                                                 c("By Date" = "heatmap1",
+                                                   "By Hour" = "heatmap2",
+                                                   "By people" = "heatmap3")),
+                                    width = 3),
+                                mainPanel(plotOutput("heatmap"))
+                            )
+                        )
+                        ),          
+               tabPanel("Boxplot"
                         ,
                         fluidPage(
-                            titlePanel("R Shiny App"),
-                            sidebarLayout(
-                                sidebarPanel("INput"),
-                                mainPanel("OUtput")
-                             )
-                            )
+                          #put Boxplot here
+                          )
                         ),
-               tabPanel("Q2"
-                        ,
-                        "Q2"),
-               tabPanel("Q3"
-                        ,
-                        "Q3"),
-               tabPanel("Q4&5",
-                        "Q4&5")
-    ),
+              tabPanel("Bipartite graph",
+                       fluidPage( #add Bipartite graph here
+                         
+                                )
+                      )
+              ),
+    tabPanel("Geospatial Analysis",
+             fluidPage("MAp"
+               
+             )),
+    tabPanel("Dataframe"
+             ,
+             "Dataframe"),
     tabPanel("Reference"
              ,
              "Reference"),
@@ -180,7 +140,7 @@ ui <- navbarPage(
              ,
              "webpage")
     
-)
+    )
 
 server <- function(input, output) {
     
@@ -208,6 +168,57 @@ server <- function(input, output) {
                           options = list(pageLength = 10),
                           rownames = FALSE)
         }
+    })
+    
+    output$heatmap <- renderPlot({
+        if(input$heatmapID == "heatmap1"){
+            ggplot(complete(cd_calendar, day, location), 
+                   aes(x = day, y = location)) +
+                geom_tile(aes(fill = n), color = "black", size = 0.1) +
+                scale_fill_gradient(low = "light blue", 
+                                    high = "blue", 
+                                    na.value = "light grey") +
+                scale_y_discrete(expand = expansion(add = 1),
+                                 limits=rev) +
+                labs(title = "Heatmap of Visit Frequency",
+                     subtitle = "(Credit card data)",
+                     x = "Day of Month",
+                     fill = "Frequency") +
+                theme_bw() +
+                theme(axis.ticks = element_blank(),
+                      panel.border = element_blank(),
+                      panel.spacing = unit(0.5, "cm"),
+                      panel.grid.major = element_blank(), 
+                      panel.grid.minor = element_blank(),
+                      text = element_text(size=7),
+                      axis.title.x = element_text(vjust=-5),
+                      axis.title.y = element_blank(),
+                      legend.position = "top")
+        }
+        else if(input$heatmapID == "heatmap2"){
+            ggplot(complete(cd_calendar2, hour, location), aes(x = hour, y = location)) + 
+                scale_x_continuous(breaks = 0:24)+
+                geom_tile(aes(fill = n), color = "black", size = 0.1) +
+                scale_fill_gradient(low = "light grey", high = "black", na.value = "white") +
+                scale_y_discrete(expand = expansion(add = 1),
+                                 limits=rev) +
+                labs(title = "Heatmap of Visit Frequency",
+                     subtitle = "(Credit card data)",
+                     x = "Hour",
+                     fill = "Frequency") +
+                theme_bw() +
+                theme(axis.ticks = element_blank(),
+                      panel.spacing = unit(0.5, "cm"),
+                      panel.grid.major = element_blank(), 
+                      text = element_text(size=7),
+                      axis.title.x = element_text(vjust=-5),
+                      legend.position = "top")
+        }
+        else if(input$heatmapID == "heatmap3"){
+            ggplot(car_data,aes(x = hour,y = id,fill = n)) + geom_tile()+
+                scale_fill_gradient(low = "light grey", high = "black")
+        }
+        
     })
 }
 shinyApp(ui, server)
