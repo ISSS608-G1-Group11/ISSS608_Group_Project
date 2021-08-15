@@ -1,0 +1,20 @@
+ID,Credit Card,Loyalty Card,Employee,Likelihood,Reason
+1,8642,L2769,,0,"Location shows Truck 104 and 106 is in the location at the time, no additional information of who drives the truck is available"
+3,9220,L4063,,0,Truck 101 is shown to be at locations during purchases made by this card
+4,3506,L7761,,0,Truck 101 is shown to be at locations during purchases made by this card
+5,2276,L3317,,0,Truck 106 is shown to be at locations during purchases made by this card
+6,9614,L5924,,0,Truck 101 is shown to be at locations during purchases made by this card
+13,6691,L6267,,0,"All transactions in crowded places with routinity, while transaction in less crowded places have no gps data to back"
+35,8411,L6110,,0,No possible gps data to corroborate transactions
+37,2418,L9018,,0,No possible gps data to corroborate transactions
+39,1286,L3288,,0,No possible gps data to corroborate transactions
+40,5368,L2247,,0,No possible gps data to corroborate transactions
+46,9241,L3288,,0,No possible gps data to corroborate transactions
+48,1877,L3014,,0,No employee location within range of transactions
+49,7117,L6417,,0,No possible gps data to corroborate transactions
+50,8202,L2343,,0,No possible gps data to corroborate transactions
+51,7792,L5756,,0,Truck 105 was shown to be in the locations during transactions
+52,4530,L8477,,0,Truck 107 was shown to be in the locations during transactions
+54,8129,L8328,,0,No GPS data at stores during transaction times
+55,9735,L9633,,0,Location data shows Truck 107 and Truck 105 would be in location of transactions happening with this card
+56,9152,L5485,,0,Location data shows Truck 107 would be in location of transactions happening with this card

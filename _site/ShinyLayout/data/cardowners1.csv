@@ -1,0 +1,12 @@
+ID,Credit Card,Loyalty Card,Employee,Likelihood,Reason
+10,6901,L9363,Felix Resumir,1,Conflicting loyalty card number with other credit card entry
+17,7819,L5259,Inga Ferro,1,"Location at Jan 16th at 8:26 PM is not directly at ""Albert's Fine Clothing"". Could be gps error or parking spot issue or could be at another place."
+18,2142,L9637,Kanon Hererro,1,"Location at Jan 12th at 3:53 PM is not directly at ""Albert's Fine Clothing"". Could be gps error or parking spot issue or could be at another place."
+21,3492,L7814,Inga Ferro,1,Conflicting loyalty card number with other credit card entry
+24,7253,L1682,Bertrand Ovan,1,Conflicting loyalty card number with other credit card entry
+29,4948,L9406,Felix Resumir,1,Conflicting loyalty card number with other credit card entry
+30,4434,L2169,Minke Mies,1,Conflicting loyalty card number with other credit card entry
+33,2681,L1107,Nils Calixto,1,GPS data shows an earlier time (~5 mins) between his departure and transaction paid. No other employees present in that timeframe
+36,3547,L9362,Bertrand Ovan,1,Conflicting loyalty card number with other credit card entry
+47,6895,L3366,Vira Frente,1,Conflicting loyalty card number with other credit card entry
+53,5921,L3295,Bertrand Ovan,1,Conflicting loyalty card number with other credit card entry
