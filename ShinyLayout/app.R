@@ -63,6 +63,8 @@ car_data <- gps %>%
   summarise(n = n()) %>% 
   ungroup()
 
+ownership <- read.csv("data/cardowners.csv")
+
 #import files
 gps_path <- readRDS("data/gps_path.rds")
 bgmap <- raster('data/MC2-tourist.tif')
@@ -214,7 +216,7 @@ ui <- navbarPage(
                ))),
     tabPanel("Dataframe"
              ,
-             "Dataframe"),
+             DT::dataTableOutput("cardowners")),
     tabPanel("Reference"
              ,
              "Reference"),
@@ -343,6 +345,8 @@ server <- function(input, output) {
       m <- m + tm_shape(data_filtered()) + tm_lines(col="name")
       m
     })
-    
+    output$cardowners <- DT::renderDataTable({
+      ownership
+    })
 }
 shinyApp(ui, server)
