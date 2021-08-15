@@ -91,6 +91,8 @@ car_data <- gps %>%
   ungroup()
 
 ownership <- read.csv("data/cardowners.csv")
+ownership1 <- read.csv("data/cardowners1.csv")
+ownership2 <- read.csv("data/cardowners2.csv")
 duplicates <- data.frame(last4ccnum = c("1286","6691","6899","9241","1286","1286"),
                          loyaltynum = c("L3288","L6267","L6267","L3288","L3288","L3572"),
                          n = c(15,16,23,13,15,10))
@@ -258,9 +260,22 @@ ui <- navbarPage(
                                            inline = TRUE))
                  
                ))),
-    tabPanel("Dataframe"
+    tabPanel("Card Ownership"
              ,
-             DT::dataTableOutput("cardowners")),
+             fluidPage(
+               titlePanel("Ownership of the cards"),
+               sidebarLayout(
+                 sidebarPanel(
+                   radioButtons(inputId = "ownerID",
+                                "Likelihood:",
+                                c("Fully Match" = "owner2",
+                                  "Approximatly Match" = "owner1",
+                                  "Can not Match" = "owner")),
+                   width = 3),
+                 mainPanel(DT::dataTableOutput("cardowners"))
+               )
+             )
+             ),
     tabPanel("Reference"
              ,
              "Reference"),
@@ -414,8 +429,18 @@ server <- function(input, output) {
         tm_shape(data_filtered()) + 
         tm_lines(col="name")
     })
+    
     output$cardowners <- DT::renderDataTable({
-      ownership
+      if(input$ownerID == "owner"){
+        ownership
+      }
+      else if(input$ownerID == "owner1"){
+        ownership1
+      }
+      else if(input$ownerID == "owner2"){
+        ownership2
+      }
+      
     })
     
     output$bigraph <- renderPlot({

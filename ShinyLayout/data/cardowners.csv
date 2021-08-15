@@ -1,56 +1,20 @@
-,cc,loy,Employee,likelihood,Reason
+ID,Credit Card,Loyalty Card,Employee,Likelihood,Reason
 1,8642,L2769,,0,"Location shows Truck 104 and 106 is in the location at the time, no additional information of who drives the truck is available"
 3,9220,L4063,,0,Truck 101 is shown to be at locations during purchases made by this card
 4,3506,L7761,,0,Truck 101 is shown to be at locations during purchases made by this card
 5,2276,L3317,,0,Truck 106 is shown to be at locations during purchases made by this card
-6,9614,NA,,0,Truck 101 is shown to be at locations during purchases made by this card
-7,3484,L2490,Varja Lagos,2,
-8,1874,L4424,Isande Borrasca,2,
-9,6816,L8148,Stenig Fusil,2,
-10,6901,L9363,Felix Resumir,1,Conflicting loyalty card number with other credit card entry
-11,2463,L6886,Willem Vasco-Pais,2,
-12,9683,L7291,Brand Tempestad,2,
+6,9614,L5924,,0,Truck 101 is shown to be at locations during purchases made by this card
 13,6691,L6267,,0,"All transactions in crowded places with routinity, while transaction in less crowded places have no gps data to back"
-14,1310,L8012,Marin Onda,2,
-15,9635,L3191,Ada Campo-Corrente,2,
-16,1415,L7783,Lars Azada,2,
-17,7819,L5259,Inga Ferro,1,"Location at Jan 16th at 8:26 PM is not directly at ""Albert's Fine Clothing"". Could be gps error or parking spot issue or could be at another place."
-18,2142,L9637,Kanon Hererro,1,"Location at Jan 12th at 3:53 PM is not directly at ""Albert's Fine Clothing"". Could be gps error or parking spot issue or could be at another place."
-19,9405,L3259,Hennie Osvaldo,2,
-20,5010,L2459,Sten Sanjorge Jr.,2,
-21,3492,L7814,Inga Ferro,1,Conflicting loyalty card number with other credit card entry
-22,9617,L5553,Birgitta Frente,2,
-23,9551,L5777,Minke Mies,2,
-24,7253,L1682,Bertrand Ovan,1,Conflicting loyalty card number with other credit card entry
-25,7384,NA,Sven Flecha,2,
-26,4795,L8566,Edvard Vann,2,
-27,5407,L4034,Isia Vann,2,
-28,7688,L4164,Ingrid Barranco,2,
-29,4948,L9406,Felix Resumir,1,Conflicting loyalty card number with other credit card entry
-30,4434,L2169,Minke Mies,1,Conflicting loyalty card number with other credit card entry
-31,2540,NA,Elsa Orilla,2,
-32,1321,L4149,Axel Calzas,2,
-33,2681,L1107,Nils Calixto,1,GPS data shows an earlier time (~5 mins) between his departure and transaction paid. No other employees present in that timeframe
-34,7889,L6119,Lucas Alcazar,2,
 35,8411,L6110,,0,No possible gps data to corroborate transactions
-36,3547,L9362,Bertrand Ovan,1,Conflicting loyalty card number with other credit card entry
 37,2418,L9018,,0,No possible gps data to corroborate transactions
-38,7108,NA,Hideki Cocinaro,2,
 39,1286,L3288,,0,No possible gps data to corroborate transactions
-40,5368,NA,,0,No possible gps data to corroborate transactions
-41,8332,NA,Orhan Strum,2,
-42,7354,NA,Isia Vann,,
-43,6899,NA,Isak Baza,,
-44,8156,L5224,Vira Frente,2,
-45,3853,NA,Loreto Bodrogi,2,
+40,5368,L2247,,0,No possible gps data to corroborate transactions
 46,9241,L3288,,0,No possible gps data to corroborate transactions
-47,6895,L3366,Vira Frente,1,Conflicting loyalty card number with other credit card entry
 48,1877,L3014,,0,No employee location within range of transactions
 49,7117,L6417,,0,No possible gps data to corroborate transactions
 50,8202,L2343,,0,No possible gps data to corroborate transactions
 51,7792,L5756,,0,Truck 105 was shown to be in the locations during transactions
 52,4530,L8477,,0,Truck 107 was shown to be in the locations during transactions
-53,5921,L3295,Bertrand Ovan,1,Conflicting loyalty card number with other credit card entry
 54,8129,L8328,,0,No GPS data at stores during transaction times
 55,9735,L9633,,0,Location data shows Truck 107 and Truck 105 would be in location of transactions happening with this card
-56,9152,NA,,0,Location data shows Truck 107 would be in location of transactions happening with this card
+56,9152,L5485,,0,Location data shows Truck 107 would be in location of transactions happening with this card
