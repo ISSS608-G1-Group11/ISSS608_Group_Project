@@ -63,7 +63,7 @@ newvalues <- factor(c("Business","Business","Unknown",
                       "Business","Unknown"
 )) 
 cdcount_location$type <- newvalues[ match(cdcount_location$location, oldvalues) ]
-
+names(cdcount_location) <- c("Location","Number_of_Times_People_Visit","Type")
 
 
 cd$timestamp <- date_time_parse(cd$timestamp,
@@ -120,7 +120,7 @@ ui <- navbarPage(
                  
              )),
     
-    navbarMenu("EDA"
+    navbarMenu("Exploratory Data Analysis"
                ,
                  tabPanel("Bar chart"
                         ,
@@ -144,7 +144,7 @@ ui <- navbarPage(
                tabPanel("Heatmap"
                         ,
                         fluidPage(
-                            titlePanel("Heatmap of "),
+                            titlePanel("Visit Frequency"),
                             sidebarLayout(
                                 sidebarPanel(
                                     radioButtons(inputId = "heatmapID",
@@ -269,10 +269,10 @@ server <- function(input, output) {
     
     output$barchart <- renderPlot({
         ggplot(cdcount_location,
-               aes(x = count,
-                   y = reorder(location,count),
-                   fill = type,
-                   stringr::str_wrap(cdcount_location$location,15)))+
+               aes(x = Number_of_Times_People_Visit,
+                   y = reorder(Location,Number_of_Times_People_Visit),
+                   fill = Type,
+                   stringr::str_wrap(cdcount_location$Location,15)))+
             geom_col(color = "grey") +
             xlab("Frequency") + ylab("Location") +
             ggtitle("Popularity of each place (Credit)") +
@@ -322,7 +322,7 @@ server <- function(input, output) {
             ggplot(complete(cd_calendar2, hour, location), aes(x = hour, y = location)) + 
                 scale_x_continuous(breaks = 0:24)+
                 geom_tile(aes(fill = n), color = "black", size = 0.1) +
-                scale_fill_gradient(low = "light grey", high = "black", na.value = "white") +
+                scale_fill_gradient(low = "light blue", high = "blue", na.value = "white") +
                 scale_y_discrete(expand = expansion(add = 1),
                                  limits=rev) +
                 labs(title = "Heatmap of Visit Frequency",
@@ -339,7 +339,7 @@ server <- function(input, output) {
         }
         else if(input$heatmapID == "heatmap3"){
             ggplot(car_data,aes(x = hour,y = id,fill = n)) + geom_tile()+
-                scale_fill_gradient(low = "light grey", high = "black")
+                scale_fill_gradient(low = "light blue", high = "blue")
         }
         
     })
