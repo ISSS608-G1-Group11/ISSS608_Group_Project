@@ -55,6 +55,7 @@ gps$id <- as_factor(gps$id)
 gps$hour <- hour(gps$Timestamp) 
 cd$day <- day(cd$timestamp) %>% as_factor
 cd$hour <- as.numeric(format(cd$timestamp,"%H"))
+cd$date <- as.Date(cd$timestamp)
 cd_calendar <- cd %>% count(day, location) %>% as_factor()
 cd_calendar2 <- cd %>% count(hour, location) %>% as_factor()
 
@@ -138,13 +139,20 @@ ui <- navbarPage(
                tabPanel("Boxplot"
                         ,
                         fluidPage(
-                          
                           titlePanel("Anomalies Transaction"),
-                          mainPanel(
-                            plotOutput("boxplot"),
-                            DT::dataTableOutput(outputId = "boxtable")
+                          sidebarLayout(
+                            sidebarPanel(
+                              width = 2,
+                              checkboxInput(inputId = "showdata1",
+                                            label = "Show data table",
+                                            value = TRUE),
+                            ),
+                            mainPanel(plotOutput("boxplot"),
+                                      DT::dataTableOutput(
+                                        outputId = "boxtable"
+                                      )
+                            )
                           )
-                          
                         )
                         ),
               tabPanel("Bipartite graph",
@@ -326,17 +334,20 @@ server <- function(input, output) {
               axis.text.y = element_text(face="bold", color="#000092",
                                          size=8, angle=0))
     })
-    
+  
     output$boxtable <- DT::renderDataTable({
-      cd1<- cd 
-      cd1$time<-format(as.POSIXct(cd1$timestamp), format = "%H:%M:%S")
-      cd1<-cd1%>%
-        relocate(date,time,price,location,last4ccnum)
-      cd1 <- cd1[order(cd1$time,cd1$date), ]
-      cd1<- cd1%>%
-        select(1:5) %>%
-        filter(time>="01:00:00"&time<="05:00:00")
-      DT::datatable(cd1)
+      if(input$showdata1){
+        cd1<- cd 
+        cd1$time<-format(as.POSIXct(cd1$timestamp), format = "%H:%M:%S")
+        cd1<-cd1%>%
+          relocate(date,time,price,location,last4ccnum)
+        cd1 <- cd1[order(cd1$time,cd1$date), ]
+        cd1<- cd1%>%
+          filter(time>="01:00:00"&time<="05:00:00")
+        DT::datatable(cd1 %>% select(1:5),
+                      options = list(pageLength = 10),
+                      rownames = FALSE)
+      }
     })
     
     data_filtered <- eventReactive(input$do,{
