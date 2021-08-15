@@ -1,0 +1,13 @@
+name: MapShiny
+title: MapShiny
+username:
+account: fadyganis
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4492346
+bundleId: 4923640
+url: https://fadyganis.shinyapps.io/MapShiny/
+when: 1628964379.76902
+lastSyncTime: 1628964379.76902
+asMultiple: FALSE
+asStatic: FALSE

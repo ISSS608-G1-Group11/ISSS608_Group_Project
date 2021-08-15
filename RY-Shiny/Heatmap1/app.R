@@ -1,4 +1,5 @@
 library(shiny)
+
 cd <- read_csv("data/cc_data.csv")
 gps <- read_csv("data/gps.csv")
 cd$timestamp <- date_time_parse(cd$timestamp,
