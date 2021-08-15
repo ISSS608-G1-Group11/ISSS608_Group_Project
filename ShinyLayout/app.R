@@ -191,7 +191,7 @@ ui <- navbarPage(
                       )
               ),
     tabPanel("Geospatial Analysis",
-             fluidPage(
+             ui <- fluidPage(
                
                # Application title
                titlePanel("Employee Movement Tracker"),
@@ -376,20 +376,20 @@ server <- function(input, output) {
     data_filtered <- eventReactive(input$do,{
       idfilt <- gps_path %>% filter(id %in% input$empID)
       timefilt <- idfilt[idfilt$m >=
-                           paste(input$daterange[1],
-                                 input$timestart) &
+                           paste(format(input$daterange[1]),
+                                 strftime(input$timestart,"%R")) &
                            idfilt$m <=
-                           paste(input$daterange[2],
-                                 input$timeend),]
+                           paste(format(input$daterange[2]),
+                                 strftime(input$timeend,"%R")),]
       timefilt
     })
     output$map <- renderTmap({
       m <- tm_shape(bgmap)+
         tm_rgb(bgmap, r =1, g = 2, b = 3,
                alpha=NA, saturation = 1, interpolate = TRUE,
-               max.value = 255)
-      m <- m + tm_shape(data_filtered()) + tm_lines(col="name")
-      m
+               max.value = 255) + 
+        tm_shape(data_filtered()) + 
+        tm_lines(col="name")
     })
     output$cardowners <- DT::renderDataTable({
       ownership
