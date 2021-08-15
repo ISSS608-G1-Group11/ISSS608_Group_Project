@@ -35,11 +35,14 @@ library(shiny)
 # Read Data
 cd <- read.csv("data/cc_data.csv")
 gps <- read_csv("data/gps.csv")
-loyalty <- read_csv("data/loyalty_data.csv")
+loyalty <- read.csv("data/loyalty_data.csv")
 ## modify data
 cd_locations <- unique(cd$location)
 cdcount_location <- cd %>% group_by(location) %>% 
     summarize(count = n())
+loy_locations <- unique(loyalty$location)
+loycount_location <- loyalty %>% group_by(location) %>% 
+  summarize(count = n())
 oldvalues <- c("Abila Airport","Abila Scrapyard","Abila Zacharo",
                "Ahaggo Museum","Albert's Fine Clothing",
                "Bean There Done That","Brew've Been Served",
@@ -66,7 +69,7 @@ newvalues <- factor(c("Business","Business","Unknown",
 )) 
 cdcount_location$type <- newvalues[ match(cdcount_location$location, oldvalues) ]
 names(cdcount_location) <- c("Location","Number_of_Times_People_Visit","Type")
-
+loycount_location$type <- newvalues[ match(loycount_location$location, oldvalues) ]
 
 cd$timestamp <- date_time_parse(cd$timestamp,
                                 zone = "",
@@ -130,16 +133,16 @@ ui <- navbarPage(
                             titlePanel("Popular Locations"),
                             sidebarLayout(
                                 sidebarPanel(
-                                    width = 2,
                                     checkboxInput(inputId = "showdata",
                                                   label = "Show data table",
                                                   value = TRUE),
-                                            ),
+                                    radioButtons(inputId = "barchartID",
+                                                 "Card Type:",
+                                                 c("Credit card" = "barchart1",
+                                                   "Loyalty card" = "barchart2")),
+                                    width = 2),
                                 mainPanel(plotOutput("barchart"),
-                                          DT::dataTableOutput(
-                                            outputId = "bartable"
-                                            )
-                                          )
+                                          DT::dataTableOutput(outputId = "bartable"))
                                         )
                                 )
                         ),
@@ -168,7 +171,7 @@ ui <- navbarPage(
                               width = 2,
                               checkboxInput(inputId = "showdata1",
                                             label = "Show data table",
-                                            value = TRUE),
+                                            value = TRUE)
                             ),
                             mainPanel(plotOutput("boxplot"),
                                       DT::dataTableOutput(
@@ -270,21 +273,41 @@ ui <- navbarPage(
 server <- function(input, output) {
     
     output$barchart <- renderPlot({
+      if(input$barchartID == "barchart1"){
         ggplot(cdcount_location,
                aes(x = Number_of_Times_People_Visit,
                    y = reorder(Location,Number_of_Times_People_Visit),
                    fill = Type,
                    stringr::str_wrap(cdcount_location$Location,15)))+
-            geom_col(color = "grey") +
-            xlab("Frequency") + ylab("Location") +
-            ggtitle("Popularity of each place (Credit)") +
-            theme(axis.text.x = element_text(face="bold", color="#000092",
-                                             size=8, angle=0),
-                  axis.text.y = element_text(face="bold", color="#000092",
-                                             size=8, angle=0),
-                  panel.background = element_blank(),
-                  panel.grid.major = element_blank(), 
-                  panel.grid.minor = element_blank())
+          geom_col(color = "grey") +
+          xlab("Frequency") + ylab("Location") +
+          ggtitle("Popularity of each place (Credit)") +
+          theme(axis.text.x = element_text(face="bold", color="#000092",
+                                           size=8, angle=0),
+                axis.text.y = element_text(face="bold", color="#000092",
+                                           size=8, angle=0),
+                panel.background = element_blank(),
+                panel.grid.major = element_blank(), 
+                panel.grid.minor = element_blank())
+      }
+      else if(input$barchartID == "barchart2"){
+        ggplot(loycount_location, 
+               aes(x = count, 
+                   y = reorder(location,count), 
+                   fill = type,
+                   stringr::str_wrap(loycount_location$location, 15))) +
+          geom_col(color = "grey")+
+          xlab("Frequency") + ylab("Location") +
+          ggtitle("Popularity of each place (Loyalty)") +
+          theme(axis.text.x = element_text(face="bold", color="#000092",
+                                           size=8, angle=0),
+                axis.text.y = element_text(face="bold", color="#000092",
+                                           size=8, angle=0),
+                panel.background = element_blank(),
+                panel.grid.major = element_blank(), 
+                panel.grid.minor = element_blank())
+      }
+        
     })
     
     output$bartable <- DT::renderDataTable({
