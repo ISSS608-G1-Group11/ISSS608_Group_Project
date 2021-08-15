@@ -278,10 +278,12 @@ ui <- navbarPage(
              ),
     tabPanel("Reference"
              ,
-             "Reference"),
-    tabPanel("Webpage"
-             ,
-             "webpage")
+             fluidRow(
+               column("[1] Griffin, K. 2014. UCD-Griffin-MC2. VAST Challenge 2014.",width = 12),
+               column("[2] Kim, H. 2014. GT-Stasko-MC2. VAST Challenge 2014.", width = 12),
+               column("[3] Wood, J. 2014. Centre-Wood-MC2. VAST Challenge 2014.", width = 12),
+               column("[4] Zhao, Y. 2014. CSU-Zhao-MC2", width = 12)
+             ))
     
     )
 
