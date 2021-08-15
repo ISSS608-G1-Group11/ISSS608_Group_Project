@@ -1,13 +1,36 @@
 #Install Packages
-packages = c('shiny','sf','tmap','clock','tidyverse','lubridate','ggiraph',
-             'ggthemes','viridis','plotly','treemapify','igraph','ggpubr',
-             'readr','mapview',"shinythemes","rgdal","shinyTime")
-for (p in packages){
-    if(!require(p, character.only = T)){
-        install.packages(p)
-    }
-    library(p,character.only = T)
-}
+
+#packages = c('shiny','sf','tmap','clock','tidyverse','lubridate','ggiraph',
+#             'ggthemes','viridis','plotly','treemapify','igraph','ggpubr',
+#             'readr','mapview',"shinythemes","rgdal","shinyTime")
+#for (p in packages){
+#    if(!require(p, character.only = T)){
+#        install.packages(p)
+#    }
+#    library(p,character.only = T)
+#}
+library(raster)
+library(sf)
+library(tmap)
+library(clock)
+library(tidyverse)
+library(lubridate)
+library(ggiraph)
+library(ggthemes)
+library(viridis)
+library(plotly)
+library(treemapify)
+library(igraph)
+library(ggpubr)
+library(readr)
+library(mapview)
+library(shinythemes)
+library(rgdal)
+library(shinyTime)
+library(shiny)
+library(dplyr)
+
+
 
 # Read Data
 cd <- read.csv("data/cc_data.csv")

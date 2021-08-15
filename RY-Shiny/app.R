@@ -50,7 +50,7 @@ ui <- fluidPage(
                           label = "Show data table",
                           value = TRUE)
         ),
-        mainPanel(plotOutput("barchart"),
+        mainPanel(plotlyOutput("barchart"),
                   DT::dataTableOutput(outputId = "bartable"))
     )
 )
@@ -59,22 +59,23 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
-    output$barchart <- renderPlot({
-        ggplot(cdcount_location,
-               aes(x = count,
-                   y = reorder(location,count),
-                   fill = type,
-                   stringr::str_wrap(cdcount_location$location,15)))+
-           geom_col(color = "grey") +
-           xlab("Frequency") + ylab("Location") +
-           ggtitle("Popularity of each place (Credit)") +
-           theme(axis.text.x = element_text(face="bold", color="#000092",
-                                            size=8, angle=0),
-                 axis.text.y = element_text(face="bold", color="#000092",
-                                            size=8, angle=0),
-                 panel.background = element_blank(),
-                 panel.grid.major = element_blank(), 
-                 panel.grid.minor = element_blank())
+    output$barchart <- renderPlotly({
+        p <- ggplot(cdcount_location,
+                    aes(x = count,
+                        y = reorder(location,count),
+                        fill = type,
+                        stringr::str_wrap(cdcount_location$location,15)))+
+        geom_col(color = "grey") +
+        xlab("Frequency") + ylab("Location") +
+        ggtitle("Popularity of each place (Credit)") +
+        theme(axis.text.x = element_text(face="bold", color="#000092",
+                                         size=8, angle=0),
+              axis.text.y = element_text(face="bold", color="#000092",
+                                        size=8, angle=0),
+              panel.background = element_blank(),
+              panel.grid.major = element_blank(), 
+              panel.grid.minor = element_blank())
+        ggplotly(p)
     })
     
     output$bartable <- DT::renderDataTable({
