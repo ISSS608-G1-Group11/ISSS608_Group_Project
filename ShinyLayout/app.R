@@ -64,6 +64,11 @@ car_data <- gps %>%
   ungroup()
 
 ownership <- read.csv("data/cardowners.csv")
+duplicates <- data.frame(last4ccnum = c("1286","6691","6899","9241","1286","1286"),
+                         loyaltynum = c("L3288","L6267","L6267","L3288","L3288","L3572"),
+                         n = c(15,16,23,13,15,10))
+
+
 
 #import files
 gps_path <- readRDS("data/gps_path.rds")
@@ -135,9 +140,6 @@ ui <- navbarPage(
                         fluidPage(
                           
                           titlePanel("Anomalies Transaction"),
-                          
-                          # Sidebar with a slider input for number of bins 
-                          # Show a plot of the generated distribution
                           mainPanel(
                             plotOutput("boxplot"),
                             DT::dataTableOutput(outputId = "boxtable")
@@ -146,6 +148,14 @@ ui <- navbarPage(
                         )
                         ),
               tabPanel("Bipartite graph",
+                       fluidPage(
+
+                         titlePanel("Cross used cards"),
+                         mainPanel(
+                           plotOutput("bigraph")
+                         )
+                         
+                       )
                        
                       )
               ),
@@ -324,9 +334,11 @@ server <- function(input, output) {
         relocate(date,time,price,location,last4ccnum)
       cd1 <- cd1[order(cd1$time,cd1$date), ]
       cd1<- cd1%>%
+        select(1:5) %>%
         filter(time>="01:00:00"&time<="05:00:00")
-      DT::datatable(cd1 %>% select (1:5))
+      DT::datatable(cd1)
     })
+    
     data_filtered <- eventReactive(input$do,{
       idfilt <- gps_path %>% filter(id %in% input$empID)
       timefilt <- idfilt[idfilt$m >=
@@ -348,5 +360,22 @@ server <- function(input, output) {
     output$cardowners <- DT::renderDataTable({
       ownership
     })
+    
+    output$bigraph <- renderPlot({
+      g <- graph.data.frame(duplicates,directed = TRUE)
+      V(g)$type <- bipartite_mapping(g)$type
+      col <- c("sky blue", "orange")
+      shape <- c("circle", "square")
+      E(g)$color <- 'steelblue'
+      plot(g, layout = layout.bipartite,
+           vertex.color = col[as.numeric(V(g)$type)+1], 
+           vertex.size = 15, vertex.label.cex = 0.8,
+           vertex.shape = shape[as.numeric(V(g)$type)+1],
+           edge.label = E(g)$n, 
+           edge.label.cex = 0.8, 
+           edge.label.color = "black", 
+           legend = TRUE)
+    })
+    
 }
 shinyApp(ui, server)
