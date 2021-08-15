@@ -115,7 +115,7 @@ car <- read_csv('data/carwithfullname.csv')
 ##########################################################################
 
 ui <- navbarPage(
-    "Mini Challenge 2"
+    "A Shiny Application for the Analysis of Spatial and Transaction Data"
     ,
     theme = shinytheme("cosmo"),
     tabPanel("Home"
@@ -160,7 +160,7 @@ ui <- navbarPage(
                                                    "By Hour" = "heatmap2",
                                                    "By people" = "heatmap3")),
                                     width = 3),
-                                mainPanel(plotOutput("heatmap"))
+                                mainPanel(plotlyOutput("heatmap"))
                             )
                         )
                         ),          
@@ -333,7 +333,7 @@ server <- function(input, output) {
         }
     })
     
-    output$heatmap <- renderPlot({
+    output$heatmap <- renderPlotly({
         if(input$heatmapID == "heatmap1"){
             ggplot(complete(cd_calendar, day, location), 
                    aes(x = day, y = location)) +
@@ -349,10 +349,10 @@ server <- function(input, output) {
                      fill = "Frequency") +
                 theme_bw() +
                 theme(axis.ticks = element_blank(),
-                      panel.border = element_blank(),
-                      panel.spacing = unit(0.5, "cm"),
-                      panel.grid.major = element_blank(), 
-                      panel.grid.minor = element_blank(),
+                      #panel.border = element_blank(),
+                      #panel.spacing = unit(0.5, "cm"),
+                      #panel.grid.major = element_blank(), 
+                      #panel.grid.minor = element_blank(),
                       text = element_text(size=7),
                       axis.title.x = element_text(vjust=-5),
                       axis.title.y = element_blank(),
@@ -372,7 +372,7 @@ server <- function(input, output) {
                 theme_bw() +
                 theme(axis.ticks = element_blank(),
                       panel.spacing = unit(0.5, "cm"),
-                      panel.grid.major = element_blank(), 
+                      #panel.grid.major = element_blank(), 
                       text = element_text(size=7),
                       axis.title.x = element_text(vjust=-5),
                       legend.position = "top")
@@ -389,7 +389,7 @@ server <- function(input, output) {
                  y = reorder(location,price)))+
         geom_boxplot(outlier.colour="tan1") +
         xlab("Price") + ylab("Location") +
-        ggtitle("Transactions of each place") +
+        ggtitle("Transactions of each place") 
         theme(axis.text.x = element_text(face="bold", color="#000092",
                                          size=8, angle=0),
               axis.text.y = element_text(face="bold", color="#000092",
