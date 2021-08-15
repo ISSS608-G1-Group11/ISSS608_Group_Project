@@ -5,9 +5,9 @@ account: ryun
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 4494124
-bundleId: 4926039
+bundleId: 4926060
 url: https://ryun.shinyapps.io/ShinyLayout/
-when: 1629046629.15379
-lastSyncTime: 1629046629.15379
+when: 1629047253.44947
+lastSyncTime: 1629047253.44947
 asMultiple: FALSE
 asStatic: FALSE

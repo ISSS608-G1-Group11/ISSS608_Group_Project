@@ -385,18 +385,20 @@ server <- function(input, output) {
         }
         
     })
+    
     output$boxplot <- renderPlot({
       ggplot(cd, 
              aes(x = price, 
                  y = reorder(location,price)))+
         geom_boxplot(outlier.colour="tan1") +
         xlab("Price") + ylab("Location") +
-        ggtitle("Transactions of each place") 
+        ggtitle("Transactions of each place") +
         theme(axis.text.x = element_text(face="bold", color="#000092",
                                          size=8, angle=0),
               axis.text.y = element_text(face="bold", color="#000092",
                                          size=8, angle=0))
     })
+      
   
     output$boxtable <- DT::renderDataTable({
       if(input$showdata1){
