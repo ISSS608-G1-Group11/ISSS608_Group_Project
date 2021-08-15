@@ -1,7 +1,7 @@
 #Install Packages
 packages = c('shiny','raster','sf','tmap','clock','tidyverse','lubridate','ggiraph',
              'ggthemes','viridis','plotly','treemapify','igraph','ggpubr',
-             'readr','mapview',"shinythemes")
+             'readr','mapview',"shinythemes","rgdal","shinyTime")
 for (p in packages){
     if(!require(p, character.only = T)){
         install.packages(p)
@@ -12,6 +12,7 @@ for (p in packages){
 # Read Data
 cd <- read.csv("data/cc_data.csv")
 gps <- read_csv("data/gps.csv")
+loyalty <- read_csv("data/loyalty_data.csv")
 ## modify data
 cd_locations <- unique(cd$location)
 cdcount_location <- cd %>% group_by(location) %>% 
@@ -62,7 +63,20 @@ car_data <- gps %>%
   summarise(n = n()) %>% 
   ungroup()
 
+#import files
+gps_path <- readRDS("data/gps_path.rds")
+bgmap <- raster('data/MC2-tourist.tif')
 
+#plot initial map
+tmap_mode("plot")
+tm_shape(bgmap) + tm_raster(bgmap,legend.show = FALSE)
+
+
+# Driver Name to add to gps df later?
+car <- read_csv('data/carwithfullname.csv')
+
+
+##########################################################################
 
 ui <- navbarPage(
     "Mini Challenge 2"
@@ -117,19 +131,87 @@ ui <- navbarPage(
                tabPanel("Boxplot"
                         ,
                         fluidPage(
-                          #put Boxplot here
+                          
+                          titlePanel("Anomalies Transaction"),
+                          
+                          # Sidebar with a slider input for number of bins 
+                          # Show a plot of the generated distribution
+                          mainPanel(
+                            plotOutput("boxplot"),
+                            DT::dataTableOutput(outputId = "boxtable")
                           )
+                          
+                        )
                         ),
               tabPanel("Bipartite graph",
-                       fluidPage( #add Bipartite graph here
-                         
-                                )
+                       
                       )
               ),
     tabPanel("Geospatial Analysis",
-             fluidPage("MAp"
+             fluidPage(
                
-             )),
+               # Application title
+               titlePanel("Employee Movement Tracker"),
+               fluidRow(
+                 mainPanel(tmapOutput("map")),
+                 column(4,actionButton("do","Plot Path"),
+                        dateRangeInput(
+                          "daterange", h5("Select Date Range:"),
+                          start = min(gps_path$day),
+                          end = max(gps_path$day),
+                          min = min(gps_path$day),
+                          max = max(gps_path$day)),
+                        fluidRow(column(7,timeInput("timestart","Starting Date Time:",minute.steps = 5)),
+                                 column(7,timeInput("timeend","End Date Time:",minute.steps = 5)))
+                 )),
+               fluidRow(
+                 column(12,
+                        checkboxGroupInput("empID",
+                                           h3("Select Employees"),
+                                           choices = list("Nils Calixto" = 1,
+                                                          "Lars Azada" = 2,
+                                                          "Felix Balas" = 3,
+                                                          "Ingrid Barranco" = 4,
+                                                          "Isak Baza" = 5,
+                                                          "Linnea Bergen" = 6,
+                                                          "Elsa Orilla" = 7,
+                                                          "Lucas Alcazar" = 8,
+                                                          "Gustav Cazar" = 9,
+                                                          "Ada Campo-Corrente" = 10,
+                                                          "Axel Calzas" = 11,
+                                                          "Hideki Cocinaro" = 12,
+                                                          "Inga Ferro" = 13,
+                                                          "Lidelse Dedos" = 14,
+                                                          "Loreto Bodrogi" = 15,
+                                                          "Isia Vann" = 16,
+                                                          "Sven Flecha" = 17,
+                                                          "Birgitta Frente" = 18,
+                                                          "Vira Frente" = 19,
+                                                          "Stenig Fusil" = 20,
+                                                          "Hennie Osvaldo" = 21,
+                                                          "Adra Nubarron" = 22,
+                                                          "Varja Lagos" = 23,
+                                                          "Minke Mies" = 24,
+                                                          "Kanon Herrero" = 25,
+                                                          "Marin Onda" = 26,
+                                                          "Kare Orilla" = 27,
+                                                          "Isande Borrasca" = 28,
+                                                          "Bertrand Ovan" = 29,
+                                                          "Felix Resumir"=30,
+                                                          "Sten Sanjorge Jr." = 31,
+                                                          "Orhan Strum" = 32,
+                                                          "Brand Tempestad" = 33,
+                                                          "Edvard Vann" = 34,
+                                                          "Willem Vasco-Pais" = 35,
+                                                          "Truck 101" = 101,
+                                                          "Truck 104" = 104,
+                                                          "Truck 105" = 105,
+                                                          "Truck 106" = 106,
+                                                          "Truck 107" = 107),
+                                           selected = c(1,2,3,4,5),
+                                           inline = TRUE))
+                 
+               ))),
     tabPanel("Dataframe"
              ,
              "Dataframe"),
@@ -220,5 +302,47 @@ server <- function(input, output) {
         }
         
     })
+    output$boxplot <- renderPlot({
+      ggplot(cd, 
+             aes(x = price, 
+                 y = reorder(location,price)))+
+        geom_boxplot(outlier.colour="tan1") +
+        xlab("Price") + ylab("Location") +
+        ggtitle("Transactions of each place") +
+        theme(axis.text.x = element_text(face="bold", color="#000092",
+                                         size=8, angle=0),
+              axis.text.y = element_text(face="bold", color="#000092",
+                                         size=8, angle=0))
+    })
+    
+    output$boxtable <- DT::renderDataTable({
+      cd1<- cd 
+      cd1$time<-format(as.POSIXct(cd1$timestamp), format = "%H:%M:%S")
+      cd1<-cd1%>%
+        relocate(date,time,price,location,last4ccnum)
+      cd1 <- cd1[order(cd1$time,cd1$date), ]
+      cd1<- cd1%>%
+        filter(time>="01:00:00"&time<="05:00:00")
+      DT::datatable(cd1 %>% select (1:5))
+    })
+    data_filtered <- eventReactive(input$do,{
+      idfilt <- gps_path %>% filter(id %in% input$empID)
+      timefilt <- idfilt[idfilt$m >=
+                           paste(input$daterange[1],
+                                 input$timestart) &
+                           idfilt$m <=
+                           paste(input$daterange[2],
+                                 input$timeend),]
+      timefilt
+    })
+    output$map <- renderTmap({
+      m <- tm_shape(bgmap)+
+        tm_rgb(bgmap, r =1, g = 2, b = 3,
+               alpha=NA, saturation = 1, interpolate = TRUE,
+               max.value = 255)
+      m <- m + tm_shape(data_filtered()) + tm_lines(col="name")
+      m
+    })
+    
 }
 shinyApp(ui, server)
