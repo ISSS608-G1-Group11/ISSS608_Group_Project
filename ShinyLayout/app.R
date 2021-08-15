@@ -1,5 +1,5 @@
 #Install Packages
-packages = c('shiny','raster','sf','tmap','clock','tidyverse','lubridate','ggiraph',
+packages = c('shiny','sf','tmap','clock','tidyverse','lubridate','ggiraph',
              'ggthemes','viridis','plotly','treemapify','igraph','ggpubr',
              'readr','mapview',"shinythemes","rgdal","shinyTime")
 for (p in packages){
