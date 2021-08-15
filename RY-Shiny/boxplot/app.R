@@ -8,39 +8,11 @@ for (p in packages){
     }
     library(p,character.only = T)
 }
-cd <- read_csv("data/cc_data.csv")
-loyalty <- read_csv("data/loyalty_data.csv")
-cd$timestamp <- date_time_parse(cd$timestamp,
-                                zone = "",
-                                format = "%m/%d/%Y %H:%M")
-loyalty$timestamp <- date_time_parse(loyalty$timestamp,
-                                     zone = "",
-                                     format = "%m/%d/%Y")
-cd$date <- as.Date(cd$timestamp)
-cd$last4ccnum <- as_factor(cd$last4ccnum)
-cd_loyalty <- cd %>% 
-    inner_join(loyalty, by = c("date" = "timestamp",
-                               "location" = "location",
-                               "price" = "price"),
-               method = "osa",
-               max_dist = 1,
-               distance_col = "distance")
-cd_loyalty1 <- cd_loyalty %>% 
-    group_by(last4ccnum,loyaltynum) %>%
-    count() %>%
-    ungroup()
 
-loyalty_cd_duplicates <- subset(cd_loyalty1,loyaltynum == "L6267" | loyaltynum == "L3288") 
-
-cd_loyalty_duplicates <- subset(cd_loyalty1,last4ccnum == "1286")
-duplicates <- rbind(loyalty_cd_duplicates,cd_loyalty_duplicates)
-g <- graph.data.frame(duplicates,directed = TRUE)
-
-V(g)$type <- bipartite_mapping(g)$type
-col <- c("sky blue", "orange")
-shape <- c("circle", "square")
-E(g)$color <- 'steelblue'
-
+duplicates <- data.frame(last4ccnum = c("1286","6691","6899","9241","1286","1286"),
+                         loyaltynum = c("L3288","L6267","L6267","L3288","L3288","L3572"),
+                         n = c(15,16,23,13,15,10))
+ 
 
 ui <- fluidPage(
 
@@ -56,6 +28,11 @@ ui <- fluidPage(
 server <- function(input, output) {
 
     output$bigraph <- renderPlot({
+        g <- graph.data.frame(duplicates,directed = TRUE)
+        V(g)$type <- bipartite_mapping(g)$type
+        col <- c("sky blue", "orange")
+        shape <- c("circle", "square")
+        E(g)$color <- 'steelblue'
         plot(g, layout = layout.bipartite,
              vertex.color = col[as.numeric(V(g)$type)+1], 
              vertex.size = 15, vertex.label.cex = 0.8,
